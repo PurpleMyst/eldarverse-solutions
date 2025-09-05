@@ -1,0 +1,17 @@
+[package]
+name = "benchmark"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+problem-a = { path = "../problem-a" }
+
+[dev-dependencies]
+criterion = { version = "0.3", features = ["html_reports"] }
+
+[[bench]]
+name = "criterion"
+harness = false
+
+[lib]
+bench = false
