@@ -3,20 +3,21 @@
 # dependencies = [
 #     "typer",
 #     "tomlkit",
+#     "tabulate",
 #     "termcolor",
 # ]
 # ///
 import os
-import typing as t
-import subprocess
 import shlex
-from pathlib import Path
-from functools import partial
-
-import typer
-import tomlkit as toml
+import subprocess
+import sys
+import typing as t
 from datetime import datetime
+from functools import partial
+from pathlib import Path
 
+import tomlkit as toml
+import typer
 from termcolor import colored as c
 
 app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
@@ -51,6 +52,7 @@ pub fn solve() -> impl Display {
 """
 
 WORKSPACE_MANIFEST_PATH = Path(__file__).parent / "Cargo.toml"
+
 
 def run(cmd: t.Sequence[str | Path], /, **kwargs) -> subprocess.CompletedProcess:
     check = kwargs.pop("check", True)
@@ -132,12 +134,14 @@ def start_solve(problem_char: str) -> None:
 
     run(("git", "add", crate))
 
+
 @app.command()
 def save_output() -> None:
     "Run problem solution and save output to output.txt"
     proc = run(("cargo", "run", "--release"), stdout=subprocess.PIPE)
     output = proc.stdout.decode().strip()
     (Path("output.txt")).write_text(output, newline="\n")
+
 
 @app.command()
 def compare_output() -> None:
@@ -156,7 +160,6 @@ def compare_output() -> None:
             else:
                 print(c("- " + expected_line, "yellow"))
                 print(c("+ " + output_line, "red"))
-
 
 
 @app.command()
@@ -182,6 +185,7 @@ def measure_completion_time() -> None:
         table.append((problem.name, str(completion_time)))
     print(tabulate(table, headers=[PROBLEM_NAME.title(), "Completion Time"], tablefmt="fancy_grid"))
 
+
 @app.command()
 def set_completion_time() -> None:
     "Set the completion time for the problem you're currently in."
@@ -197,6 +201,7 @@ def set_completion_time() -> None:
 
     with WORKSPACE_MANIFEST_PATH.open("w") as manifest_f:
         toml.dump(manifest, manifest_f)
+
 
 app.command("ss")(start_solve)
 app.command("sct")(set_completion_time)
