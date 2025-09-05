@@ -38,6 +38,7 @@ dependencies = [
  "problem-c",
  "problem-e",
  "problem-g",
+ "problem-i",
 ]
 
 [[package]]
@@ -391,6 +392,13 @@ dependencies = [
  "itertools 0.14.0",
  "pathfinding",
  "rayon",
+]
+
+[[package]]
+name = "problem-i"
+version = "0.1.0"
+dependencies = [
+ "common",
 ]
 
 [[package]]

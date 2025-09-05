@@ -29,4 +29,5 @@ problems!(
     problem_c,
     problem_e,
     problem_g,
+    problem_i,
 );

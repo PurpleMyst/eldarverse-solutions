@@ -1,0 +1,12 @@
+1
+4 6
+gojira
+rachvela
+lekva
+samurai
+ADD gojira rachvela
+ADD gojira lekva
+ADD lekva samurai
+SUGGEST samurai
+ADD samurai gojira
+SUGGEST samurai
