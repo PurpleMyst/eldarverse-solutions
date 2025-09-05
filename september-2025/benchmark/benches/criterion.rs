@@ -26,4 +26,5 @@ macro_rules! problems {
 problems!(
     problem_a
     problem-b,
+    problem-c,
 );

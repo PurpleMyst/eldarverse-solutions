@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 problem-a = { path = "../problem-a" }
 problem-b = { version = "0.1.0", path = "../problem-b" }
+problem-c = { version = "0.1.0", path = "../problem-c" }
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ["html_reports"] }

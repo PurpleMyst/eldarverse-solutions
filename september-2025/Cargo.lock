@@ -35,6 +35,7 @@ dependencies = [
  "criterion",
  "problem-a",
  "problem-b",
+ "problem-c",
 ]
 
 [[package]]
@@ -307,6 +308,13 @@ dependencies = [
  "itertools 0.14.0",
  "owo-colors",
  "rayon",
+]
+
+[[package]]
+name = "problem-c"
+version = "0.1.0"
+dependencies = [
+ "common",
 ]
 
 [[package]]
