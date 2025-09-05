@@ -35,6 +35,8 @@ fn main() {{
 LIB = """\
 use std::fmt::Display;
 
+use common::*;
+
 #[inline]
 pub fn solve() -> impl Display {
     cases(
@@ -110,7 +112,7 @@ def start_solve(problem_char: str) -> None:
     )
 
     src = crate_path / "src"
-    (src / "main.rs").write_text(MAIN.format(crate=crate), newline="\n")
+    (src / "main.rs").write_text(MAIN.format(crate=crate.replace("-", "_")), newline="\n")
     (src / "lib.rs").write_text(LIB, newline="\n")
 
     run(
@@ -133,7 +135,7 @@ def start_solve(problem_char: str) -> None:
 @app.command()
 def save_output() -> None:
     "Run problem solution and save output to output.txt"
-    proc = run(("cargo", "run"), stdout=subprocess.PIPE)
+    proc = run(("cargo", "run", "--release"), stdout=subprocess.PIPE)
     output = proc.stdout.decode().strip()
     (Path("output.txt")).write_text(output, newline="\n")
 
