@@ -129,7 +129,7 @@ def start_solve(problem_char: str) -> None:
     )
 
     benches = Path("benchmark", "benches")
-    add_line(benches / "criterion.rs", f"    {crate},")
+    add_line(benches / "criterion.rs", f"    {crate.replace('-', '_')},")
 
     run(("git", "add", crate))
 

@@ -24,8 +24,9 @@ macro_rules! problems {
 
 #[rustfmt::skip]
 problems!(
-    problem_a
-    problem-b,
-    problem-c,
-    problem-e,
+    problem_a,
+    problem_b,
+    problem_c,
+    problem_e,
+    problem_g,
 );
