@@ -37,7 +37,14 @@ use std::fmt::Display;
 
 #[inline]
 pub fn solve() -> impl Display {
-    "TODO"
+    cases(
+        include_str!("input.txt")
+        .lines()
+        .skip(1)
+        .map(|line| {
+            "TODO"
+        })
+     )
 }\
 """
 
@@ -105,6 +112,18 @@ def start_solve(problem_char: str) -> None:
     src = crate_path / "src"
     (src / "main.rs").write_text(MAIN.format(crate=crate), newline="\n")
     (src / "lib.rs").write_text(LIB, newline="\n")
+
+    run(
+        (
+            "cargo",
+            "add",
+            "--manifest-path",
+            f"{crate}/Cargo.toml",
+            "--path",
+            Path(__file__).parent / "common",
+            "common",
+        )
+    )
 
     benches = Path("benchmark", "benches")
     add_line(benches / "criterion.rs", f"    {crate},")
