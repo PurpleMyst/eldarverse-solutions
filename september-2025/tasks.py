@@ -43,7 +43,6 @@ pub fn solve() -> impl Display {
     cases(
         include_str!("input.txt")
         .lines()
-        .skip(1)
         .map(|line| {
             "TODO"
         })

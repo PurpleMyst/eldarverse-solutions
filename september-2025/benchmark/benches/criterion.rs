@@ -27,4 +27,5 @@ problems!(
     problem_a
     problem-b,
     problem-c,
+    problem-e,
 );

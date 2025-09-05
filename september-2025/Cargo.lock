@@ -36,6 +36,7 @@ dependencies = [
  "problem-a",
  "problem-b",
  "problem-c",
+ "problem-e",
 ]
 
 [[package]]
@@ -312,6 +313,13 @@ dependencies = [
 
 [[package]]
 name = "problem-c"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
+
+[[package]]
+name = "problem-e"
 version = "0.1.0"
 dependencies = [
  "common",
