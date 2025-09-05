@@ -139,6 +139,25 @@ def save_output() -> None:
     output = proc.stdout.decode().strip()
     (Path("output.txt")).write_text(output, newline="\n")
 
+@app.command()
+def compare_output() -> None:
+    "Compare current output to output.txt"
+    expected = (Path("output.txt")).read_text().strip()
+    proc = run(("cargo", "run", "--release"), stdout=subprocess.PIPE)
+    output = proc.stdout.decode().strip()
+    if output == expected:
+        print(cb("Output matches expected output.", "green"))
+    else:
+        # print diff
+        print(cb("Output does not match expected output.", "red"))
+        for expected_line, output_line in zip(expected.splitlines(), output.splitlines()):
+            if expected_line == output_line:
+                print(c("  " + expected_line, "green"))
+            else:
+                print(c("- " + expected_line, "yellow"))
+                print(c("+ " + output_line, "red"))
+
+
 
 @app.command()
 def measure_completion_time() -> None:
