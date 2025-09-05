@@ -7,6 +7,7 @@ edition = "2024"
 problem-a = { path = "../problem-a" }
 problem-b = { version = "0.1.0", path = "../problem-b" }
 problem-c = { version = "0.1.0", path = "../problem-c" }
+problem-d = { version = "0.1.0", path = "../problem-d" }
 problem-e = { version = "0.1.0", path = "../problem-e" }
 problem-g = { version = "0.1.0", path = "../problem-g" }
 problem-i = { version = "0.1.0", path = "../problem-i" }

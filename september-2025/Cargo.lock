@@ -36,6 +36,7 @@ dependencies = [
  "problem-a",
  "problem-b",
  "problem-c",
+ "problem-d",
  "problem-e",
  "problem-g",
  "problem-i",
@@ -285,6 +286,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a282da65faaf38286cf3be983213fcf1d2e2a58700e808f83f4ea9a4804bc0"
 
 [[package]]
+name = "num-modular"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "17bb261bf36fa7d83f4c294f834e91256769097b3cb505d44831e0a179ac647f"
+
+[[package]]
 name = "num-traits"
 version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -375,6 +382,14 @@ name = "problem-c"
 version = "0.1.0"
 dependencies = [
  "common",
+]
+
+[[package]]
+name = "problem-d"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "num-modular",
 ]
 
 [[package]]
