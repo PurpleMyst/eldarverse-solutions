@@ -52,6 +52,7 @@ dependencies = [
  "problem-f",
  "problem-g",
  "problem-i",
+ "problem-k",
 ]
 
 [[package]]
@@ -487,6 +488,14 @@ name = "problem-i"
 version = "0.1.0"
 dependencies = [
  "common",
+]
+
+[[package]]
+name = "problem-k"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "rayon",
 ]
 
 [[package]]

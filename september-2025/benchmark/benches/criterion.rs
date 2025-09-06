@@ -32,4 +32,5 @@ problems!(
     problem_i,
     problem_d,
     problem_f,
+    problem_k,
 );
