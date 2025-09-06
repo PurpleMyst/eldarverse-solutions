@@ -177,12 +177,18 @@ def measure_completion_time() -> None:
         end_time = metadata.get("completion_time")
         src = problem / "src"
         if start_time is None:
+            if not (src / "input.txt").exists():
+                print(cb(f"No input.txt found for {problem.name}, skipping.", "yellow"))
+                continue
             start_time = datetime.fromtimestamp((src / "input.txt").stat().st_ctime)
         if end_time is None:
+            if not any(src.glob("**/*.rs")):
+                print(cb(f"No .rs files found for {problem.name}, skipping.", "yellow"))
+                continue
             end_time = datetime.fromtimestamp(max(f.stat().st_mtime for f in src.glob("**/*.rs")))
         completion_time = end_time - start_time
         table.append((problem.name, str(completion_time)))
-    print(tabulate(table, headers=[PROBLEM_NAME.title(), "Completion Time"], tablefmt="fancy_grid"))
+    print(tabulate(table, headers=[PROBLEM_NAME.title().strip("-"), "Completion Time"], tablefmt="fancy_grid"))
 
 
 @app.command()
