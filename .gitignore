@@ -1,4 +1,4 @@
 target
 __pycache__
-input.txt
-output.txt
+*.csv
+*.png
