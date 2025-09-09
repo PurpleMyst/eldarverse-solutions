@@ -1,5 +1,7 @@
 use std::{fmt::Display, num::NonZeroU8};
 
+use indicatif::*;
+
 use common::*;
 
 /*
@@ -118,10 +120,6 @@ struct SearchStep<'arena> {
     length: usize,
 }
 
-fn rgb_ansi(r: u8, g: u8, b: u8) -> String {
-    format!("\x1b[38;2;{r};{g};{b}m")
-}
-
 impl SearchStep<'_> {
     fn to_string_with_charset(&self, charset: &str) -> String {
         let mut s = String::with_capacity(self.length);
@@ -133,35 +131,6 @@ impl SearchStep<'_> {
             current = node.previous;
         }
         s.chars().rev().collect()
-    }
-
-    fn to_pretty_string(&self) -> String {
-        let mut s = Vec::new();
-        let mut current = Some(self);
-        while let Some(node) = current {
-            let i = (node.suffix.get() - 1) as usize;
-            let suffix_bytes = &GEOLYMP.as_bytes()[i..];
-            let color = match i {
-                0 => rgb_ansi(255, 0, 0),     // G - Red
-                1 => rgb_ansi(255, 165, 0),   // E - Orange
-                2 => rgb_ansi(255, 255, 0),   // O - Yellow
-                3 => rgb_ansi(0, 128, 0),     // L - Green
-                4 => rgb_ansi(0, 0, 255),     // Y - Blue
-                5 => rgb_ansi(75, 0, 130),    // M - Indigo
-                6 => rgb_ansi(238, 130, 238), // P - Violet
-                7 => String::new(),           // Start node, no color
-                _ => unreachable!(),
-            };
-            s.push(
-                suffix_bytes
-                    .iter()
-                    .map(|&b| format!("{color}{}\x1b[0m", b as char))
-                    .collect::<String>(),
-            );
-
-            current = node.previous;
-        }
-        s.into_iter().rev().collect::<String>() + "\x1b[0m"
     }
 }
 
@@ -219,46 +188,42 @@ impl<'arena> Searcher<'arena> {
 #[inline]
 pub fn solve() -> impl Display {
     let input = include_str!("input.txt");
-    let total = input.lines().skip(1).count();
-    cases(input.lines().skip(1).enumerate().map(|(i, line)| {
-        let n = line.trim().parse::<u32>().unwrap();
-        let arena = bumpalo::Bump::new();
-        let mut searcher = Searcher::new(n, &arena);
+    let total = input.lines().count();
+    cases(
+        input
+            .lines()
+            .progress_count(total as u64)
+            .map(|line| {
+                let n = line.trim().parse::<u32>().unwrap();
+                let arena = bumpalo::Bump::new();
+                let mut searcher = Searcher::new(n, &arena);
 
-        let mut m = n;
-        while m != 0 {
-            let base = build_base(m);
+                let mut m = n;
+                while m != 0 {
+                    let base = build_base(m);
 
-            let Some(node) = searcher.search_with_base(&base) else {
-                m >>= 1;
-                continue;
-            };
+                    let Some(node) = searcher.search_with_base(&base) else {
+                        m >>= 1;
+                        continue;
+                    };
 
-            debug_assert_eq!(
-                count_geolymp(
-                    format!("{base}{}", node.to_string_with_charset(FAKE_GEOLYMP)).as_bytes()
-                ),
-                n
-            );
-            let ps = node.to_pretty_string();
-            let l = node.to_string_with_charset(GEOLYMP).len();
-            let readable_base = base
-                .bytes()
-                .map(|b| GEOLYMP.as_bytes()[b as usize] as char)
-                .collect::<String>();
-            eprintln!(
-                "[{:2}/{:2}] {n:11} => {readable_base}{}{pad} ({:4})",
-                i + 1,
-                total,
-                ps,
-                l,
-                pad = " ".repeat((64usize).saturating_sub(l + base.len()))
-            );
+                    debug_assert_eq!(
+                        count_geolymp(
+                            format!("{base}{}", node.to_string_with_charset(FAKE_GEOLYMP))
+                                .as_bytes()
+                        ),
+                        n
+                    );
+                    let readable_base = base
+                        .bytes()
+                        .map(|b| GEOLYMP.as_bytes()[b as usize] as char)
+                        .collect::<String>();
 
-            return format!("{readable_base}{}", node.to_string_with_charset(GEOLYMP));
-        }
-        panic!();
-    }))
+                    return format!("{readable_base}{}", node.to_string_with_charset(GEOLYMP));
+                }
+                unreachable!();
+            })
+    )
 }
 
 fn build_base(n: u32) -> String {

@@ -6,7 +6,4 @@ edition = "2024"
 [dependencies]
 bumpalo = "3.19.0"
 common = { version = "0.1.0", path = "../common" }
-genetic_algorithm = "0.20.5"
-indicatif = "0.18.0"
-memoize = "0.5.1"
-rand = "0.9.2"
+indicatif = { version = "0.18.0" }
