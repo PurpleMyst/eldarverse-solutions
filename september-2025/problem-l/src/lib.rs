@@ -2,6 +2,13 @@ use std::{fmt::Display, num::NonZeroU8};
 
 use common::*;
 
+/*
+ * Built painstakingly by hand. Basically a DFS, made faster by various micro-opts combined with
+ * trying to start from floor(log2(n)).
+ *
+ * Takes a few minutes, so go get a coffee or something.
+ */
+
 const GEOLYMP: &str = "GEOLYMP";
 const FAKE_GEOLYMP: &str = "\x00\x01\x02\x03\x04\x05\x06";
 
@@ -130,6 +137,7 @@ impl SearchStep<'_> {
                 4 => rgb_ansi(0, 0, 255),     // Y - Blue
                 5 => rgb_ansi(75, 0, 130),    // M - Indigo
                 6 => rgb_ansi(238, 130, 238), // P - Violet
+                7 => String::new(),           // Start node, no color
                 _ => unreachable!(),
             };
             s.push(
@@ -174,32 +182,98 @@ impl<'arena> Searcher<'arena> {
         }
         None
     }
+
+    fn search_with_prefix(&mut self, prefix: &str) -> Option<&'arena SearchStep<'arena>> {
+        debug_assert!(
+            prefix.bytes().all(|b| b <= GEOLYMP_LEN as u8),
+            "Prefix contains invalid characters"
+        );
+        let prefix_bytes = prefix.as_bytes();
+        let prefixes = update_prefixes_generic(prefix_bytes, [0; GEOLYMP_LEN]);
+        let length = prefix_bytes.len();
+        let start_node = self.arena.alloc(SearchStep {
+            previous: None,
+            suffix: NonZeroU8::new(GEOLYMP_LEN as u8 + 1).unwrap(),
+            prefixes,
+            length,
+        });
+        if prefixes[GEOLYMP_LEN - 1] == self.target {
+            return Some(start_node);
+        }
+        self.search(Some(start_node))
+    }
 }
 
 #[inline]
 pub fn solve() -> impl Display {
-    let input = include_str!("sample_input.txt");
+    let input = include_str!("input.txt");
     let total = input.lines().skip(1).count();
     cases(input.lines().skip(1).enumerate().map(|(i, line)| {
         let n = line.trim().parse::<u32>().unwrap();
         let arena = bumpalo::Bump::new();
         let mut searcher = Searcher::new(n, &arena);
-        let node = searcher.search(None).unwrap();
-        debug_assert_eq!(
-            count_geolymp(&node.to_string_with_charset(FAKE_GEOLYMP).into_bytes()),
-            n
-        );
-        let ps = node.to_pretty_string();
-        let l = node.to_string_with_charset(GEOLYMP).len();
-        eprintln!(
-            "[{:2}/{:2}] {n:11} => {}{pad} ({:4})",
-            i + 1,
-            total,
-            ps,
-            l,
-            pad = " ".repeat((64usize).saturating_sub(l))
-        );
 
-        node.to_string_with_charset(GEOLYMP)
+        let mut m = n;
+        while m != 0 {
+            let prefix = build_prefix(m);
+
+            let Some(node) = searcher.search_with_prefix(&prefix) else {
+                m >>= 1;
+                continue;
+            };
+
+            debug_assert_eq!(
+                count_geolymp(
+                    format!("{prefix}{}", node.to_string_with_charset(FAKE_GEOLYMP)).as_bytes()
+                ),
+                n
+            );
+            let ps = node.to_pretty_string();
+            let l = node.to_string_with_charset(GEOLYMP).len();
+            let disp_prefix = prefix
+                .bytes()
+                .map(|b| GEOLYMP.as_bytes()[b as usize] as char)
+                .collect::<String>();
+            eprintln!(
+                "[{:2}/{:2}] {n:11} => {disp_prefix}{}{pad} ({:4})",
+                i + 1,
+                total,
+                ps,
+                l,
+                pad = " ".repeat((64usize).saturating_sub(l + prefix.len()))
+            );
+
+            return format!("{disp_prefix}{}", node.to_string_with_charset(GEOLYMP));
+        }
+        panic!();
     }))
+}
+
+fn build_prefix(n: u32) -> String {
+    let msb = n.ilog2() as usize;
+    let base = msb / 7;
+    let mut prefix = String::new();
+    for c in FAKE_GEOLYMP.chars() {
+        for _ in 0..1 << base {
+            prefix.push(c);
+        }
+    }
+    let kitty = update_prefixes_generic(prefix.as_bytes(), [0; GEOLYMP_LEN]);
+    let foo = kitty[GEOLYMP_LEN - 2];
+    let mut have = kitty[GEOLYMP_LEN - 1];
+    let mut need = (1 << msb) - have;
+    if have == 0 {
+        prefix.push_str(FAKE_GEOLYMP);
+        need -= 1;
+        have = 1;
+    }
+    let per_p = if have == 1 { 1 } else { foo };
+    prefix.push_str(
+        FAKE_GEOLYMP[GEOLYMP_LEN - 1..]
+            .repeat(need as usize / per_p as usize)
+            .as_str(),
+    );
+
+    debug_assert_eq!(count_geolymp(prefix.as_bytes()), 1 << msb);
+    prefix
 }

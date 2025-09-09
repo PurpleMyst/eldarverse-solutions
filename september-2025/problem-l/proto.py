@@ -70,9 +70,10 @@ def _doit(n: int) -> tuple[int, str | None, float]:
 
 def main() -> None:
     colorama.init()
-    while True:
-        s = input("> ")
-        print(calc_prefixes(s))
+    with suppress(KeyboardInterrupt):
+        while True:
+            s = input("> ")
+            print(calc_prefixes(s))
 
 
 
