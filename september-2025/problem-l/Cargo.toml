@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bumpalo = "3.19.0"
 common = { version = "0.1.0", path = "../common" }
-indicatif = { version = "0.18.0" }
+indicatif = { version = "0.18.0", features = ["rayon"] }
+rayon = "1.11.0"
