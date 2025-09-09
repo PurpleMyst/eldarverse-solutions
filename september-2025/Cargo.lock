@@ -54,6 +54,7 @@ dependencies = [
  "problem-i",
  "problem-k",
  "problem-l",
+ "problem-m",
 ]
 
 [[package]]
@@ -545,6 +546,14 @@ dependencies = [
  "common",
  "indicatif",
  "rayon",
+]
+
+[[package]]
+name = "problem-m"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "itertools 0.14.0",
 ]
 
 [[package]]

@@ -14,6 +14,7 @@ problem-g = { version = "0.1.0", path = "../problem-g" }
 problem-i = { version = "0.1.0", path = "../problem-i" }
 problem-k = { version = "0.1.0", path = "../problem-k" }
 problem-l = { version = "0.1.0", path = "../problem-l" }
+problem-m = { version = "0.1.0", path = "../problem-m" }
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ["html_reports"] }
