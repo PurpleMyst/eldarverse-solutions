@@ -1,0 +1,16 @@
+Case #1: 90
+Case #2: 60
+Case #3: 75
+Case #4: 65
+Case #5: 90
+Case #6: 95
+Case #7: 80
+Case #8: 60
+Case #9: 95
+Case #10: 30
+Case #11: 40
+Case #12: 50
+Case #13: 50
+Case #14: 45
+Case #15: 90
+Case #16: 90
