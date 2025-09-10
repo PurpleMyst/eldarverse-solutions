@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["benchmark", "common", "problem-a", "problem-b", "problem-c", "problem-e", "problem-g", "problem-i", "problem-d", "problem-f", "problem-k", "problem-l", "problem-m"]
+members = ["benchmark", "common", "problem-a", "problem-b", "problem-c", "problem-e", "problem-g", "problem-i", "problem-d", "problem-f", "problem-k", "problem-l", "problem-m", "problem-h"]
 
 [profile.release]
 debug = true
@@ -43,3 +43,6 @@ completion_time = 2025-09-10T01:24:59.587314
 [workspace.metadata.problem-m]
 start_time = 2025-09-10T01:25:21.262406
 completion_time = 2025-09-10T01:41:37.709205
+
+[workspace.metadata.problem-h]
+start_time = 2025-09-10T14:18:52.316277

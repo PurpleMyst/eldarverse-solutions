@@ -51,6 +51,7 @@ dependencies = [
  "problem-e",
  "problem-f",
  "problem-g",
+ "problem-h",
  "problem-i",
  "problem-k",
  "problem-l",
@@ -522,6 +523,14 @@ dependencies = [
  "itertools 0.14.0",
  "pathfinding",
  "rayon",
+]
+
+[[package]]
+name = "problem-h"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "rustc-hash",
 ]
 
 [[package]]

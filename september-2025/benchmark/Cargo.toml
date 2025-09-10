@@ -11,6 +11,7 @@ problem-d = { version = "0.1.0", path = "../problem-d" }
 problem-e = { version = "0.1.0", path = "../problem-e" }
 problem-f = { version = "0.1.0", path = "../problem-f" }
 problem-g = { version = "0.1.0", path = "../problem-g" }
+problem-h = { version = "0.1.0", path = "../problem-h" }
 problem-i = { version = "0.1.0", path = "../problem-i" }
 problem-k = { version = "0.1.0", path = "../problem-k" }
 problem-l = { version = "0.1.0", path = "../problem-l" }
